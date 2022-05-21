@@ -77,8 +77,8 @@ async function bundleHtml() {
   for (let i = 0; i < templateTags.length; i++) {
     obj[templateTags[i]] = await readFile(pathToComponents + '\\'+`${templateTags[i]}.html`);
     obj[templateTags[i]] = obj[templateTags[i]].toString();
-    let templateTemp = template.split(`{{${templateTags[i]}}}`);
-    template = templateTemp[0] + obj[templateTags[i]] + templateTemp[1];
+    let page = template.split(`{{${templateTags[i]}}}`);
+    template = page[0] + obj[templateTags[i]] + page[1];
   }
   writeFile(pathToDir + '\\'+'index.html', template);
 }
