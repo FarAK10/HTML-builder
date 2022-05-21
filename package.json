@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "html-builder task for RSSchool",
   "scripts": {
+    "02-write-file":"./02-write-file/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "evgeniimal",
