@@ -3,12 +3,20 @@ const path = require('path');
 const copiedPath = path.join(__dirname, 'files-copy');
 const filesPath= path.join(__dirname,'files');
 
-fs.mkdir(copiedPath,{recursive:true}, err => {
-  if (err) console.log(err);
-  console.log('folder created successfuly');
-});
+fs.access(copiedPath, fs.constants.F_OK, (error) => {
+  if (error) {
+    fs.mkdir(copiedPath, { recursive: true }, err => {
+      if (err) throw err;
+    })
+  }
+})
+async function DelDir() {
+  await fs.promises.rm(copiedPath, { force: true, recursive: true });
+  await fs.promises.mkdir(copiedPath, { recursive: true });
+}
 
-function copyDir(filesPath,copiedPath) {
+
+function copyDir(filesPath, copiedPath) {
   fs.readdir(filesPath, { withFileTypes: true }, (err,files)=> {
     if (err) {
       throw err;
@@ -30,4 +38,7 @@ function copyDir(filesPath,copiedPath) {
     } 
   });
 }
-copyDir(filesPath, copiedPath);
+(async function () {
+  await DelDir();
+  copyDir(filesPath, copiedPath);
+})();
