@@ -11,12 +11,12 @@ const pathToStyles = path.join(__dirname, 'styles');
 fs.mkdir(pathToDir,{recursive:true}, err => {
   if (err) throw err;
 });
-fs.mkdir(pathToDir+'\\'+'assets',{recursive:true}, err => {
+fs.mkdir(path.join(pathToDir,'assets'),{recursive:true}, err => {
   if (err) throw err;
 });
 
 // mergin all css styles
-const writeStreamCss = fs.createWriteStream(pathToDir + '\\' + 'style.css');
+const writeStreamCss = fs.createWriteStream(path.join(pathToDir ,'style.css'));
 async function merginStyles(pathToStyles) {
   fs.readdir(pathToStyles, { withFileTypes: true }, (err, files) => {
     if (err) {
@@ -54,7 +54,7 @@ function copyDir(filesPath,copiedPath) {
           }); 
         }
         else if (file.isDirectory()) {
-          fs.mkdir(copiedPath+'\\'+file.name,{recursive:true}, err => {
+          fs.mkdir(path.join(copiedPath,file.name),{recursive:true}, err => {
             if (err) throw err;
           });
           copyDir(path.join(filesPath, file.name),path.join(copiedPath, file.name));
@@ -63,7 +63,7 @@ function copyDir(filesPath,copiedPath) {
     } 
   });
 }
-copyDir(pathToAssets, pathToDir + '\\' + 'assets');
+copyDir(pathToAssets,path.join(pathToDir ,'assets'));
 
 // add html to assets
 let pathToTemplate = path.join(__dirname, 'template.html');
@@ -75,11 +75,11 @@ async function bundleHtml() {
   const templateTags = template.match(/{{.+}}/gi).map((tag) => tag.slice(2, tag.length - 2));
   const obj = {};
   for (let i = 0; i < templateTags.length; i++) {
-    obj[templateTags[i]] = await readFile(pathToComponents + '\\'+`${templateTags[i]}.html`);
+    obj[templateTags[i]] = await readFile(path.join(pathToComponents ,`${templateTags[i]}.html`));
     obj[templateTags[i]] = obj[templateTags[i]].toString();
     let page = template.split(`{{${templateTags[i]}}}`);
     template = page[0] + obj[templateTags[i]] + page[1];
   }
-  writeFile(pathToDir + '\\'+'index.html', template);
+  writeFile(path.join(pathToDir ,'index.html'), template);
 }
 bundleHtml();

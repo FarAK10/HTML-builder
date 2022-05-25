@@ -29,7 +29,7 @@ function copyDir(filesPath, copiedPath) {
           }); 
         }
         else if (file.isDirectory()) {
-          fs.mkdir(copiedPath+'\\'+file.name,{recursive:true}, err => {
+          fs.mkdir(path.join(copiedPath,file.name),{recursive:true}, err => {
             if (err) throw err;
           });
           copyDir(path.join(filesPath, file.name),path.join(copiedPath, file.name));
